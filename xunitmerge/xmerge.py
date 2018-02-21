@@ -89,8 +89,11 @@ def merge_trees(*trees):
         return first_tree
 
     for tree in trees[1:]:
-        root = tree.getroot()
-
+        # TODO check this implementation
+        try:
+            root = tree.getroot()
+        except:
+            root = tree
         # append children elements (testcases)
         first_root.extend(root.getchildren())
 
@@ -105,7 +108,7 @@ def merge_trees(*trees):
     return first_tree
 
 
-def merge_xunit(files, output, callback=None):
+def merge_xunit(files, output, variables, callback=None):
     """
     Merge the given xunit xml files into a single output xml file.
 
@@ -118,6 +121,9 @@ def merge_xunit(files, output, callback=None):
 
     for f in files:
         trees.append(etree.parse(f))
+
+    for i in variables:
+        trees.append(etree.fromstring(i))
 
     merged = merge_trees(*trees)
 
